@@ -19,7 +19,8 @@ class TaskController extends Controller
     {
         return Response::success(
             TaskResource::collection(
-                Task::latest()->paginate(5)
+//                Task::incomplete()->latest()->paginate(5)
+                Task::where('is_completed', false)->latest()->paginate(5)
             )
         );
     }
@@ -39,7 +40,7 @@ class TaskController extends Controller
     {
         try {
             $task = Task::create($request->validated());
-            return Response::successMessage(__('responses.task.created'));
+            return Response::success(new TaskResource($task));
         } catch (\Exception $e) {
             return Response::errorMessage($e->getMessage());
         }

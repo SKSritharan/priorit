@@ -1,14 +1,20 @@
 <template>
-    <h1 class="flex h-screen items-center justify-center">{{ message }}</h1>
+    <div class="container mx-auto p-6 h-screen">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <AddTaskForm />
+            <TaskList />
+        </div>
+    </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
+<script>
+import AddTaskForm from './Task/AddTaskForm.vue'
+import TaskList from './Task/TaskList.vue'
 
-// A "ref" is a reactive data source that stores a value.
-// Technically, we don't need to wrap the string with ref()
-// in order to display it, but we will see in the next
-// example why it is needed if we ever intend to change
-// the value.
-const message = ref('Hello World!')
+export default {
+    components: {
+        AddTaskForm,
+        TaskList
+    }
+}
 </script>
