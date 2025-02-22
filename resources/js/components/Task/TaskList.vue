@@ -17,7 +17,7 @@
                     v-for="task in taskStore.tasks"
                     :key="task.id"
                     :task="task"
-                    @mark-done="taskStore.toggleTaskComplete"
+                    @mark-done="taskStore.markTaskAsComplete"
                 />
             </TransitionGroup>
 

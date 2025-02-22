@@ -70,9 +70,10 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTaskRequest $request, Task $task)
+    public function update(UpdateTaskRequest $request, $taskId)
     {
         try {
+            $task = Task::findOrFail($taskId);
             $task->update($request->validated());
             return Response::successMessage(__('responses.task.updated'));
         } catch (\Exception $e) {
@@ -97,10 +98,11 @@ class TaskController extends Controller
     /**
      * mark task as completed
      */
-    public function markAsCompleted(Task $task)
+    public function markAsCompleted($taskId)
     {
         try {
-            $task->update(['completed' => true]);
+            $task = Task::findOrFail($taskId);
+            $task->update(['is_completed' => true]);
             return Response::successMessage(__('responses.task.completed'));
         } catch (\Exception $e) {
             return Response::errorMessage(__('responses.task.not_found'));

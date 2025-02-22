@@ -58,11 +58,12 @@ export const useTaskStore = defineStore('tasks', {
             }
         },
 
-        async toggleTaskComplete(taskId) {
+        async markTaskAsComplete(taskId) {
             const toast = useToast()
             this.error = null
             try {
-                await axios.put(`/api/tasks/${taskId}/complete`)
+                const response = await axios.put(`/api/tasks/${taskId}/complete`)
+                console.log('task id:', taskId, 'response:', response)
                 const task = this.tasks.find(t => t.id === taskId)
                 if (task) {
                     task.completed = !task.completed
