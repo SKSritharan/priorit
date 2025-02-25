@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-gray-100 rounded-lg p-4 flex justify-between items-center">
+    <div class="task-item bg-gray-100 rounded-lg p-4 flex justify-between items-center">
         <div>
             <h3 class="font-medium">{{ task.title }}</h3>
             <p class="text-sm text-gray-600">{{ task.description }}</p>

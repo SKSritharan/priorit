@@ -17,6 +17,7 @@ export const useTaskStore = defineStore('tasks', {
 
     actions: {
         async fetchTasks() {
+            const toast = useToast()
             this.loading = true
             this.loadingTasks = true
             this.error = null
@@ -53,6 +54,7 @@ export const useTaskStore = defineStore('tasks', {
             } catch (error) {
                 this.error = 'Failed to add task'
                 console.error(error)
+                toast.error("Failed to create task")
             } finally {
                 this.loading = false
             }
@@ -74,6 +76,7 @@ export const useTaskStore = defineStore('tasks', {
                 }
             } catch (error) {
                 this.error = 'Failed to update task'
+                toast.error("Failed to update task")
                 console.error(error)
             }
         },

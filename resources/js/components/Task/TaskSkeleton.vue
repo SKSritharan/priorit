@@ -3,7 +3,7 @@
         <div
             v-for="n in count"
             :key="n"
-            class="bg-gray-100 rounded-lg p-4 relative overflow-hidden"
+            class="task-skeleton bg-gray-100 rounded-lg p-4 relative overflow-hidden"
         >
             <div class="h-5 bg-gray-200 rounded w-2/3 mb-2"></div>
             <div class="h-4 bg-gray-200 rounded w-3/4"></div>

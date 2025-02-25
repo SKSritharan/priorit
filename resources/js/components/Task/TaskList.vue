@@ -23,7 +23,7 @@
 
             <div
                 v-else
-                class="bg-gray-50 rounded-lg p-8 text-center"
+                class="empty-state bg-gray-50 rounded-lg p-8 text-center"
             >
                 <div class="text-gray-400 mb-2">
                     <svg
