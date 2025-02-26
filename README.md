@@ -2,6 +2,8 @@
 
 A simple to-do task web application built with Laravel, Vue, and MySQL. Users can create tasks, view the latest five pending tasks, and mark tasks as completed. The project is containerized with Docker using Laravel Sail and follows clean code principles with unit tests for both frontend and backend.
 
+![To-Do Task App](https://github.com/SKSritharan/priorit/public/screenshots/hero_shot.png)
+
 ## **Features**
 ✅ Create new tasks with a title and description  
 ✅ View the most recent 5 pending tasks  
