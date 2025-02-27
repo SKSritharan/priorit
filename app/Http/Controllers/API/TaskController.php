@@ -15,13 +15,23 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $request->validate([
+            'perPage' => 'sometimes|integer|min:1|max:100',
+            'isCompleted' => 'sometimes|boolean',
+        ]);
+
+        $perPage = $request->perPage ?? 5;
+
+        $tasks = Task::latest()
+            ->when($request->has('isCompleted'), function ($query) use ($request) {
+                return $query->where('is_completed', $request->isCompleted);
+            })
+            ->paginate($perPage);
+
         return Response::success(
-            TaskResource::collection(
-//                Task::incomplete()->latest()->paginate(5)
-                Task::where('is_completed', false)->latest()->paginate(5)
-            )
+            TaskResource::collection($tasks)
         );
     }
 
