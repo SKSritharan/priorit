@@ -25,6 +25,7 @@ A simple to-do task web application built with Laravel, Vue, and MySQL. Users ca
 ## **Installation & Setup**
 
 ### **Prerequisites**
+- [Composer](https://getcomposer.org/download/) installed on your system.
 - Ensure you have **Docker** installed on your system.
 - Laravel Sail is supported on macOS, Linux, and Windows (via [WSL2](https://docs.microsoft.com/en-us/windows/wsl/about))
 
@@ -41,18 +42,25 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-### **Step 3: Start the Application**
+### **Step 3: Install Dependencies**
+Install Composer dependencies:
+
+```sh
+composer install
+```
+
+### **Step 4: Start the Application**
 ```sh
 ./vendor/bin/sail up -d
 ```
 > **Note:** The first time running Sail will install dependencies and build the containers.
 
-### **Step 4: Run Migrations**
+### **Step 5: Run Migrations**
 ```sh
 ./vendor/bin/sail artisan migrate
 ```
 
-### **Step 5: Access the Application**
+### **Step 6: Access the Application**
 - Frontend: `http://localhost`
 - Backend API: `http://localhost/api/tasks`
 
