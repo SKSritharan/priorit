@@ -8,7 +8,9 @@ export const useTaskStore = defineStore('tasks', {
         loading: false,
         loadingTasks: false,
         error: null,
-        maxTasks: 5,
+        pagination: {
+            perPage: 5,
+        }
     }),
 
     getters: {
@@ -16,15 +18,20 @@ export const useTaskStore = defineStore('tasks', {
     },
 
     actions: {
-        async fetchTasks() {
+        async fetchTasks(page = 1) {
             const toast = useToast()
-            this.loading = true
             this.loadingTasks = true
             this.error = null
             try {
                 await new Promise(resolve => setTimeout(resolve, 1500))
-                const response = await axios.get('/api/tasks')
-                this.tasks = response.data.data.slice(0, this.maxTasks)
+                const response = await axios.get('/api/tasks', {
+                    params: {
+                        perPage: this.pagination.perPage,
+                        isCompleted: 0,
+                    }
+                })
+
+                this.tasks = response.data.data
             } catch (error) {
                 this.error = 'Failed to fetch tasks'
                 toast.error("Failed to load tasks")
