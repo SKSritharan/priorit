@@ -34,19 +34,26 @@ git clone https://github.com/SKSritharan/priorit.git
 cd priorit
 ```
 
-### **Step 2: Start the Application**
+### **Step 2: Set Up Environment Variables**
+Before starting the application, copy the example environment file and generate the application key:
+```sh
+cp .env.example .env
+php artisan key:generate
+```
+
+### **Step 3: Start the Application**
 ```sh
 ./vendor/bin/sail up -d
 ```
 > **Note:** The first time running Sail will install dependencies and build the containers.
 
-### **Step 3: Run Migrations**
+### **Step 4: Run Migrations**
 ```sh
 ./vendor/bin/sail artisan migrate
 ```
 
-### **Step 4: Access the Application**
-- Frontend: `http://localhost:80`
+### **Step 5: Access the Application**
+- Frontend: `http://localhost`
 - Backend API: `http://localhost/api/tasks`
 
 ## **Running Tests**

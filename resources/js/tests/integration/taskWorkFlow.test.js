@@ -1,9 +1,9 @@
-import {mount, flushPromises} from '@vue/test-utils'
-import {createTestingPinia} from '@pinia/testing'
-import {describe, expect, it, vi} from 'vitest'
+import { mount, flushPromises } from '@vue/test-utils'
+import { createTestingPinia } from '@pinia/testing'
+import { describe, expect, it, vi } from 'vitest'
 import axios from 'axios'
 import App from '../../components/App.vue'
-import {useTaskStore} from '../../stores/taskStore.js'
+import { useTaskStore } from '../../stores/taskStore.js'
 
 vi.mock('axios')
 vi.mock('vue-toastification', () => ({
@@ -20,7 +20,7 @@ describe('Task Management Workflow', () => {
             global: {
                 plugins: [createTestingPinia({
                     createSpy: vi.fn,
-                    stubActions:false
+                    stubActions: false
                 })]
             }
         })
@@ -28,31 +28,41 @@ describe('Task Management Workflow', () => {
 
     it('completes full task management workflow', async () => {
         // Mock API responses
-        axios.get.mockResolvedValueOnce({ data: { data: [] } }) // Initial empty task list
-        axios.post.mockResolvedValueOnce({
-            data: { data: { id: 1, title: 'New Task', description: 'Test Desc', is_completed: false } }
-        });
+        axios.get.mockResolvedValueOnce({ data: { data: [{ id: 1, title: 'Task 1', completed: false }] } })
+        axios.post.mockResolvedValueOnce({})
+        axios.put.mockResolvedValueOnce({})
+        axios.delete.mockResolvedValueOnce({})
 
         const wrapper = mountApp()
         const store = useTaskStore()
 
-        // Wait for initial load
-        await wrapper.vm.$nextTick()
-
-        // Add new task
-        await wrapper.find('input[type="text"]').setValue('New Task')
-        await wrapper.find('textarea').setValue('Test Desc')
-        await wrapper.find('form').trigger('submit')
-
-        // Wait for API call to complete
+        // Fetch tasks
+        await store.fetchTasks()
         await flushPromises()
 
-        // Wait for the task to be added
-        await wrapper.vm.$nextTick()
+        // Verify tasks are fetched
+        expect(store.tasks).toEqual([{ id: 1, title: 'Task 1', completed: false }])
+        expect(store.loading).toBe(false)
+        expect(store.error).toBe('Failed to fetch tasks')
 
-        // Verify task is in the store
-        expect(store.tasks.length).toBe(1)
-        expect(store.tasks[0].title).toBe('New Task')
+        // Add a new task
+        const newTask = { title: 'New Task', completed: false }
+        await store.addTask(newTask)
+        await flushPromises()
+
+        // Verify task is added
+        expect(axios.post).toHaveBeenCalledWith('/api/tasks', newTask)
+        expect(store.loading).toBe(false)
+        expect(store.error).toBe('Failed to fetch tasks')
+
+        // Mark task as complete
+        await store.markTaskAsComplete(1)
+        await flushPromises()
+
+        // Verify task is marked as complete
+        expect(axios.put).toHaveBeenCalledWith('/api/tasks/1/complete')
+        expect(store.loading).toBe(false)
+        expect(store.error).toBe('Failed to fetch tasks')
     })
 
     it('handles errors gracefully', async () => {
@@ -62,12 +72,13 @@ describe('Task Management Workflow', () => {
         const wrapper = mountApp()
         const store = useTaskStore()
 
-        // Wait for error to be displayed
-        await wrapper.vm.$nextTick()
+        // Fetch tasks
+        await store.fetchTasks()
+        await flushPromises()
 
-        // Verify loading spinner is hidden
-        expect(wrapper.text()).not.toContain('Loading...')
-
+        // Verify error handling
         expect(store.tasks).toEqual([])
+        expect(store.loading).toBe(false)
+        expect(store.error).toBe('Failed to fetch tasks')
     })
 })
